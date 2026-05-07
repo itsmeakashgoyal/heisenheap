@@ -14,7 +14,7 @@
 
 #include "heisenheap/error.h"
 
-#include "heisenheap/compiler.h"   // for HH_UNREACHABLE()
+#include "heisenheap/compiler.h"  // for HH_UNREACHABLE()
 
 namespace heisenheap {
 
@@ -24,23 +24,40 @@ const char* describe(ErrorCode code) noexcept {
     // -Wswitch will warn (and -Werror will turn that into a build
     // failure), keeping the table in sync with the enum.
     switch (code) {
-        case ErrorCode::None:                    return "no error";
-        case ErrorCode::Uninitialized:           return "heisenheap is not initialized";
-        case ErrorCode::AlreadyInitialized:      return "heisenheap is already initialized";
-        case ErrorCode::InvalidOptions:          return "invalid options";
-        case ErrorCode::SizeZero:                return "allocation size must be greater than zero";
-        case ErrorCode::SizeAboveMaximum:        return "allocation size exceeds configured maximum";
-        case ErrorCode::AlignmentNotPowerOfTwo:  return "alignment must be a power of two";
-        case ErrorCode::AlignmentTooLarge:       return "alignment exceeds supported maximum";
-        case ErrorCode::NotSampled:              return "allocation was not sampled";
-        case ErrorCode::NotOwned:                return "pointer is not owned by heisenheap";
-        case ErrorCode::DoubleFree:              return "pointer was already freed";
-        case ErrorCode::InvalidFree:             return "free of an invalid pointer";
-        case ErrorCode::PoolExhausted:           return "guarded slot pool is exhausted";
-        case ErrorCode::LargeCapacityExhausted:  return "large allocator capacity is exhausted";
-        case ErrorCode::OutOfMemory:             return "out of virtual memory";
-        case ErrorCode::DisabledOnCurrentThread: return "heisenheap is disabled on the current thread";
-        case ErrorCode::Internal:                return "internal error";
+        case ErrorCode::None:
+            return "no error";
+        case ErrorCode::Uninitialized:
+            return "heisenheap is not initialized";
+        case ErrorCode::AlreadyInitialized:
+            return "heisenheap is already initialized";
+        case ErrorCode::InvalidOptions:
+            return "invalid options";
+        case ErrorCode::SizeZero:
+            return "allocation size must be greater than zero";
+        case ErrorCode::SizeAboveMaximum:
+            return "allocation size exceeds configured maximum";
+        case ErrorCode::AlignmentNotPowerOfTwo:
+            return "alignment must be a power of two";
+        case ErrorCode::AlignmentTooLarge:
+            return "alignment exceeds supported maximum";
+        case ErrorCode::NotSampled:
+            return "allocation was not sampled";
+        case ErrorCode::NotOwned:
+            return "pointer is not owned by heisenheap";
+        case ErrorCode::DoubleFree:
+            return "pointer was already freed";
+        case ErrorCode::InvalidFree:
+            return "free of an invalid pointer";
+        case ErrorCode::PoolExhausted:
+            return "guarded slot pool is exhausted";
+        case ErrorCode::LargeCapacityExhausted:
+            return "large allocator capacity is exhausted";
+        case ErrorCode::OutOfMemory:
+            return "out of virtual memory";
+        case ErrorCode::DisabledOnCurrentThread:
+            return "heisenheap is disabled on the current thread";
+        case ErrorCode::Internal:
+            return "internal error";
     }
     // Unreachable: every enumerator is handled above. This both silences
     // GCC's "control reaches end of non-void function" warning and lets

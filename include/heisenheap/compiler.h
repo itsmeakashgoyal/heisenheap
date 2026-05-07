@@ -29,63 +29,63 @@
 #pragma once
 
 #if defined(__clang__) || defined(__GNUC__)
-    // ----- Clang and GCC path -----
-    //
-    // __builtin_expect(x, value) returns x but tells the compiler "I expect
-    // x to equal `value` most of the time". The compiler uses that hint to
-    // arrange machine code so the common path stays in the CPU's straight
-    // line of execution (better instruction-cache behaviour, fewer branch
-    // mispredictions).
-    //
-    // The "!!" trick converts whatever expression the user passed into a
-    // proper 0-or-1 integer so the comparison against 1 / 0 inside
-    // __builtin_expect is well-defined even when `x` is, say, a pointer.
-    #define HH_LIKELY(x)        __builtin_expect(!!(x), 1)
-    #define HH_UNLIKELY(x)      __builtin_expect(!!(x), 0)
+// ----- Clang and GCC path -----
+//
+// __builtin_expect(x, value) returns x but tells the compiler "I expect
+// x to equal `value` most of the time". The compiler uses that hint to
+// arrange machine code so the common path stays in the CPU's straight
+// line of execution (better instruction-cache behaviour, fewer branch
+// mispredictions).
+//
+// The "!!" trick converts whatever expression the user passed into a
+// proper 0-or-1 integer so the comparison against 1 / 0 inside
+// __builtin_expect is well-defined even when `x` is, say, a pointer.
+#define HH_LIKELY(x)   __builtin_expect(!!(x), 1)
+#define HH_UNLIKELY(x) __builtin_expect(!!(x), 0)
 
-    // Force the function body to be inlined at every call site. The plain
-    // C++ keyword `inline` is only a *hint*; modern compilers ignore it
-    // when they think inlining would hurt. always_inline overrides that
-    // judgement — useful for tiny hot-path helpers (single-instruction
-    // accessors, branch-prediction shims).
-    #define HH_FORCE_INLINE     inline __attribute__((always_inline))
+// Force the function body to be inlined at every call site. The plain
+// C++ keyword `inline` is only a *hint*; modern compilers ignore it
+// when they think inlining would hurt. always_inline overrides that
+// judgement — useful for tiny hot-path helpers (single-instruction
+// accessors, branch-prediction shims).
+#define HH_FORCE_INLINE inline __attribute__((always_inline))
 
-    // The opposite: never inline this function. Useful when we want a
-    // function symbol to remain present so the debugger can break on it
-    // (signal handlers, error reporters).
-    #define HH_NEVER_INLINE     __attribute__((noinline))
+// The opposite: never inline this function. Useful when we want a
+// function symbol to remain present so the debugger can break on it
+// (signal handlers, error reporters).
+#define HH_NEVER_INLINE __attribute__((noinline))
 
-    // C's "restrict" qualifier in C++ form. A "restrict" pointer promises
-    // the compiler that nothing else in the function will read or write
-    // through the same address. The compiler can use that promise to
-    // reorder loads/stores more aggressively. Use sparingly and carefully.
-    #define HH_RESTRICT         __restrict__
+// C's "restrict" qualifier in C++ form. A "restrict" pointer promises
+// the compiler that nothing else in the function will read or write
+// through the same address. The compiler can use that promise to
+// reorder loads/stores more aggressively. Use sparingly and carefully.
+#define HH_RESTRICT __restrict__
 
-    // Tells the compiler that control flow can never reach this point.
-    // Used after exhaustive switch statements over an `enum class` so the
-    // compiler knows it doesn't need to emit a default branch.
-    #define HH_UNREACHABLE()    __builtin_unreachable()
+// Tells the compiler that control flow can never reach this point.
+// Used after exhaustive switch statements over an `enum class` so the
+// compiler knows it doesn't need to emit a default branch.
+#define HH_UNREACHABLE() __builtin_unreachable()
 
-    // Lets us emit a `#pragma` from inside a macro — useful for diagnostic
-    // suppression around tricky inline code.
-    #define HH_PRAGMA(x)        _Pragma(#x)
+// Lets us emit a `#pragma` from inside a macro — useful for diagnostic
+// suppression around tricky inline code.
+#define HH_PRAGMA(x) _Pragma(#x)
 
 #elif defined(_MSC_VER)
-    // ----- MSVC path -----
-    //
-    // Wired up so call sites stay portable; not exercised by the current
-    // macOS/Linux test matrix.
-    #define HH_LIKELY(x)        (x)            // MSVC has no direct equivalent
-    #define HH_UNLIKELY(x)      (x)
-    #define HH_FORCE_INLINE     __forceinline
-    #define HH_NEVER_INLINE     __declspec(noinline)
-    #define HH_RESTRICT         __restrict
-    #define HH_UNREACHABLE()    __assume(0)
-    #define HH_PRAGMA(x)        __pragma(x)
+// ----- MSVC path -----
+//
+// Wired up so call sites stay portable; not exercised by the current
+// macOS/Linux test matrix.
+#define HH_LIKELY(x)     (x)  // MSVC has no direct equivalent
+#define HH_UNLIKELY(x)   (x)
+#define HH_FORCE_INLINE  __forceinline
+#define HH_NEVER_INLINE  __declspec(noinline)
+#define HH_RESTRICT      __restrict
+#define HH_UNREACHABLE() __assume(0)
+#define HH_PRAGMA(x)     __pragma(x)
 
 #else
-    // Any other toolchain (older xlC, Intel classic, exotic embedded
-    // compilers) is unsupported. We fail at build time rather than silently
-    // producing a slower binary because the optimisation hints disappeared.
-    #error "Unsupported compiler: extend heisenheap/compiler.h."
+// Any other toolchain (older xlC, Intel classic, exotic embedded
+// compilers) is unsupported. We fail at build time rather than silently
+// producing a slower binary because the optimisation hints disappeared.
+#error "Unsupported compiler: extend heisenheap/compiler.h."
 #endif

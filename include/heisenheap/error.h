@@ -46,23 +46,23 @@ namespace heisenheap {
 /// The underlying integer is `std::uint16_t` so the value is cheap to
 /// pass and stored compactly inside `Error` (which lives in user code).
 enum class ErrorCode : std::uint16_t {
-    None = 0,                   ///< sentinel: not an error
-    Uninitialized,              ///< Heisenheap::create() was never called
-    AlreadyInitialized,         ///< second call to create() while still running
-    InvalidOptions,             ///< Options::validate() found a bad field
-    SizeZero,                   ///< caller asked for 0 bytes
-    SizeAboveMaximum,           ///< requested size > Options::max_alloc_size_
-    AlignmentNotPowerOfTwo,     ///< alignment must be 1, 2, 4, 8, 16, ...
-    AlignmentTooLarge,          ///< alignment > implementation maximum
-    NotSampled,                 ///< sampler said "skip this allocation"
-    NotOwned,                   ///< pointer doesn't belong to heisenheap
-    DoubleFree,                 ///< pointer is in the quarantine list
-    InvalidFree,                ///< pointer is not at a slot's user_ptr
-    PoolExhausted,              ///< no free slots in the guarded pool
-    LargeCapacityExhausted,     ///< no free records in the large allocator
-    OutOfMemory,                ///< pal::vm reservation failed
-    DisabledOnCurrentThread,    ///< ScopedDisable is active on this thread
-    Internal,                   ///< logic bug — should never happen in shipped code
+    None = 0,                 ///< sentinel: not an error
+    Uninitialized,            ///< Heisenheap::create() was never called
+    AlreadyInitialized,       ///< second call to create() while still running
+    InvalidOptions,           ///< Options::validate() found a bad field
+    SizeZero,                 ///< caller asked for 0 bytes
+    SizeAboveMaximum,         ///< requested size > Options::max_alloc_size_
+    AlignmentNotPowerOfTwo,   ///< alignment must be 1, 2, 4, 8, 16, ...
+    AlignmentTooLarge,        ///< alignment > implementation maximum
+    NotSampled,               ///< sampler said "skip this allocation"
+    NotOwned,                 ///< pointer doesn't belong to heisenheap
+    DoubleFree,               ///< pointer is in the quarantine list
+    InvalidFree,              ///< pointer is not at a slot's user_ptr
+    PoolExhausted,            ///< no free slots in the guarded pool
+    LargeCapacityExhausted,   ///< no free records in the large allocator
+    OutOfMemory,              ///< pal::vm reservation failed
+    DisabledOnCurrentThread,  ///< ScopedDisable is active on this thread
+    Internal,                 ///< logic bug — should never happen in shipped code
 };
 
 /// Value type returned (wrapped in std::optional) by APIs that can fail
@@ -113,9 +113,7 @@ struct Error {
 /// location captured via HH_HERE at the call site.
 ///
 ///     return make_error(ErrorCode::PoolExhausted, HH_HERE);
-[[nodiscard]] inline Error make_error(
-        ErrorCode code,
-        SourceLocation where = {}) noexcept {
+[[nodiscard]] inline Error make_error(ErrorCode code, SourceLocation where = {}) noexcept {
     return Error{code, describe(code), where};
 }
 

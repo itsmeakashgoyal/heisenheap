@@ -1,0 +1,104 @@
+---
+# Heisenheap C++ formatting rules.
+# Authoritative source for layout (indent, braces, alignment, include order).
+# Cross-reference: docs/STYLE.md owns naming, idioms, and project deltas.
+#
+# Base: Google C++ Style Guide, with a small set of project-specific deltas
+# (4-space indent and 100-column limit per docs/STYLE.md section 6 and 8).
+
+Language: Cpp
+BasedOnStyle: Google
+Standard: c++17
+
+# --- Indentation -------------------------------------------------------------
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ContinuationIndentWidth: 4
+ConstructorInitializerIndentWidth: 4
+AccessModifierOffset: -4   # public:/private:/protected: flush with class
+
+# --- Line width --------------------------------------------------------------
+ColumnLimit: 100
+
+# --- Alignment ---------------------------------------------------------------
+# Vertically align types, names, `=`, and trailing comments across consecutive
+# declarations. This is what gives member-variable blocks the tabular look:
+#
+#     std::byte*  base_  = nullptr;
+#     std::size_t size_  = 0;
+#     bool        ready_ = false;
+#
+# Borrowed from the corelay project's .clang-format.
+AlignAfterOpenBracket: Align
+AlignConsecutiveAssignments: true
+AlignConsecutiveBitFields: true
+AlignConsecutiveDeclarations: true
+AlignConsecutiveMacros: true
+AlignEscapedNewlines: Left
+AlignTrailingComments: true
+
+# --- Braces ------------------------------------------------------------------
+BreakBeforeBraces: Attach   # opening brace on same line as declaration
+
+# --- Pointers & references ---------------------------------------------------
+DerivePointerAlignment: false
+PointerAlignment: Left      # `T* x;`, `const T& y;`
+
+# --- Short blocks: keep them out of one line for readability -----------------
+AllowShortBlocksOnASingleLine: Empty
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: Empty
+AllowShortLoopsOnASingleLine: false
+
+# --- Includes ----------------------------------------------------------------
+# STYLE.md section 2 specifies three groups, each alphabetised, separated by
+# blank lines:
+#   1. Paired header (.cpp only) — IncludeIsMainRegex matches it; priority 0.
+#   2. C++ standard headers (e.g. <cstddef>, <optional>).
+#   3. Project headers ("heisenheap/...").
+SortIncludes: CaseSensitive
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex:    '^<[a-z_]+>$'
+    Priority: 1                          # C++ standard library (no extension)
+  - Regex:    '^<.*>$'
+    Priority: 2                          # other system / third-party angle includes
+  - Regex:    '^"heisenheap/'
+    Priority: 3                          # project headers
+  - Regex:    '.*'
+    Priority: 4
+IncludeIsMainRegex: '(_test|_unittest)?$'
+
+# --- Misc layout -------------------------------------------------------------
+AlwaysBreakTemplateDeclarations: Yes
+BinPackArguments: true
+BinPackParameters: false
+BreakConstructorInitializers: BeforeColon
+CompactNamespaces: false
+FixNamespaceComments: true
+KeepEmptyLinesAtTheStartOfBlocks: false
+MaxEmptyLinesToKeep: 1
+NamespaceIndentation: None
+ReflowComments: true
+SortUsingDeclarations: true
+
+# --- Spacing -----------------------------------------------------------------
+SpaceAfterTemplateKeyword: true
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCpp11BracedList: false
+SpaceBeforeCtorInitializerColon: true
+SpaceBeforeInheritanceColon: true
+SpaceBeforeParens: ControlStatements
+SpaceBeforeRangeBasedForLoopColon: true
+SpacesBeforeTrailingComments: 2
+SpaceInEmptyBlock: false
+SpaceInEmptyParentheses: false
+SpacesInAngles: false
+SpacesInCStyleCastParentheses: false
+SpacesInContainerLiterals: false
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+...

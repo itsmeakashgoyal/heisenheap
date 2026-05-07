@@ -3,10 +3,10 @@
 // SourceLocation is just a POD struct, so the only behaviour worth
 // verifying is that the HH_HERE macro fills it with sensible values
 // from the *caller's* source position.
-#include <gtest/gtest.h>
-
 #include <cstring>
 #include <string>
+
+#include <gtest/gtest.h>
 
 #include "heisenheap/source_location.h"
 
@@ -14,8 +14,12 @@ namespace {
 
 // Two helpers in this anonymous namespace let us call HH_HERE from two
 // different physical lines and confirm the line numbers differ.
-heisenheap::SourceLocation here_a() { return HH_HERE; }
-heisenheap::SourceLocation here_b() { return HH_HERE; }
+heisenheap::SourceLocation here_a() {
+    return HH_HERE;
+}
+heisenheap::SourceLocation here_b() {
+    return HH_HERE;
+}
 
 }  // namespace
 

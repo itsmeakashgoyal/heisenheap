@@ -4,11 +4,11 @@
 // aggregates) so the test surface is small: we confirm aggregate
 // initialisation works, the helper accessors return sensible values,
 // and the layout matches what the rest of the codebase assumes.
-#include <gtest/gtest.h>
-
 #include <cstddef>
 #include <cstdint>
 #include <type_traits>
+
+#include <gtest/gtest.h>
 
 #include "heisenheap/allocation.h"
 
@@ -32,7 +32,7 @@ TEST(Allocation, DefaultConstructedIsInvalidAndEmpty) {
 // use for byte-level access (memcpy/memset/iteration).
 TEST(Allocation, BytesViewMatchesPtrAndUsableSize) {
     std::uint8_t storage[16] = {};
-    Allocation a{storage, /*requested_size=*/10, /*usable_size=*/16};
+    Allocation   a{storage, /*requested_size=*/10, /*usable_size=*/16};
     EXPECT_TRUE(a.valid());
     auto bytes = a.bytes();
     EXPECT_EQ(bytes.size(), 16u);
@@ -43,8 +43,8 @@ TEST(Allocation, BytesViewMatchesPtrAndUsableSize) {
 // buffer (in which case any pointers into the old buffer are invalid).
 // We explicitly set moved_ to test both paths.
 TEST(Reallocation, MovedReflectsPtrChange) {
-    int x = 0;
-    int y = 0;
+    int          x = 0;
+    int          y = 0;
     Reallocation moved{&y, &x, 4u, true};
     Reallocation in_place{&x, &x, 4u, false};
     EXPECT_TRUE(moved.moved_);

@@ -62,7 +62,7 @@ public:
     using const_pointer   = const T*;
     using reference       = T&;
     using const_reference = const T&;
-    using iterator        = T*;        // raw pointer iterators are enough for our purposes
+    using iterator        = T*;  // raw pointer iterators are enough for our purposes
     using const_iterator  = const T*;
 
     /// Construct an empty span (`size_ == 0`, `data_ == nullptr`).
@@ -75,8 +75,7 @@ public:
     ///             `count` is also zero.
     /// @param count Number of elements `data` points at. The caller
     ///             promises `data[0..count-1]` are valid memory.
-    constexpr Span(pointer data, size_type count) noexcept
-        : data_(data), size_(count) {}
+    constexpr Span(pointer data, size_type count) noexcept : data_(data), size_(count) {}
 
     /// Construct from a built-in array — the size is deduced from the
     /// array's type, eliminating an opportunity for a (ptr,size) mismatch.
@@ -95,20 +94,20 @@ public:
     ///
     /// The pointer-to-array trick is the same one std::span uses; it
     /// allows `int* → const int*` but rejects unrelated unsafe casts.
-    template <
-        typename U,
-        typename = std::enable_if_t<
-            std::is_convertible<U (*)[], T (*)[]>::value>>
-    constexpr Span(const Span<U>& other) noexcept
-        : data_(other.data()), size_(other.size()) {}
+    template <typename U, typename = std::enable_if_t<std::is_convertible<U (*)[], T (*)[]>::value>>
+    constexpr Span(const Span<U>& other) noexcept : data_(other.data()), size_(other.size()) {}
 
     // -------- Capacity and raw access. ----------------------------------
 
     /// Pointer to the first element (or nullptr for an empty span).
-    [[nodiscard]] constexpr pointer   data()  const noexcept { return data_; }
+    [[nodiscard]] constexpr pointer data() const noexcept {
+        return data_;
+    }
 
     /// Number of elements in the view.
-    [[nodiscard]] constexpr size_type size()  const noexcept { return size_; }
+    [[nodiscard]] constexpr size_type size() const noexcept {
+        return size_;
+    }
 
     /// Number of *bytes* the view spans, i.e. `size() * sizeof(T)`.
     [[nodiscard]] constexpr size_type size_bytes() const noexcept {
@@ -116,7 +115,9 @@ public:
     }
 
     /// True if the span contains zero elements.
-    [[nodiscard]] constexpr bool      empty() const noexcept { return size_ == 0; }
+    [[nodiscard]] constexpr bool empty() const noexcept {
+        return size_ == 0;
+    }
 
     // -------- Element access. -------------------------------------------
     //
@@ -149,8 +150,12 @@ public:
     // memory, which it is for any Span. This is enough to enable
     // `for (auto& x : span)` and the standard `<algorithm>` family.
 
-    constexpr iterator begin() const noexcept { return data_; }
-    constexpr iterator end()   const noexcept { return data_ + size_; }
+    constexpr iterator begin() const noexcept {
+        return data_;
+    }
+    constexpr iterator end() const noexcept {
+        return data_ + size_;
+    }
 
     // -------- Sub-views. ------------------------------------------------
 
@@ -172,8 +177,7 @@ public:
     /// `count == size_type(-1)` is the sentinel value meaning "to the end",
     /// matching std::span's `dynamic_extent` overload.
     [[nodiscard]] constexpr Span subspan(
-            size_type offset,
-            size_type count = static_cast<size_type>(-1)) const noexcept {
+        size_type offset, size_type count = static_cast<size_type>(-1)) const noexcept {
         assert(offset <= size_);
         const size_type effective_count =
             (count == static_cast<size_type>(-1)) ? (size_ - offset) : count;
@@ -183,8 +187,8 @@ public:
 
 private:
     // Trailing underscores: project style rule (see STYLE.md).
-    pointer   data_ = nullptr;   // first element, or nullptr when empty
-    size_type size_ = 0;         // element count
+    pointer   data_ = nullptr;  // first element, or nullptr when empty
+    size_type size_ = 0;        // element count
 };
 
 }  // namespace heisenheap

@@ -31,7 +31,7 @@
 // =============================================================================
 #pragma once
 
-#include <cstddef>      // std::size_t, std::byte
+#include <cstddef>  // std::size_t, std::byte
 
 #include "heisenheap/span.h"
 
@@ -66,7 +66,9 @@ struct Allocation {
 
     /// Quick predicate: was the allocation actually performed?
     /// (i.e. `ptr_ != nullptr`). False for default-constructed values.
-    [[nodiscard]] bool valid() const noexcept { return ptr_ != nullptr; }
+    [[nodiscard]] bool valid() const noexcept {
+        return ptr_ != nullptr;
+    }
 };
 
 /// Result of a successful deallocation.

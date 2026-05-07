@@ -4,15 +4,15 @@
 //   1. make_error fills code_ + message_ correctly
 //   2. The default-constructed Error is the "no error" sentinel
 //   3. describe() returns a non-null string for every enumerator
-#include <gtest/gtest.h>
-
 #include <cstring>
+
+#include <gtest/gtest.h>
 
 #include "heisenheap/error.h"
 
+using heisenheap::describe;
 using heisenheap::Error;
 using heisenheap::ErrorCode;
-using heisenheap::describe;
 using heisenheap::make_error;
 
 // make_error(code) should set the code field and look the message up

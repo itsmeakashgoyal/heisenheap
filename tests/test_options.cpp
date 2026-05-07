@@ -17,14 +17,14 @@ using heisenheap::OptionsBuilder;
 // defaults are meant to be a sensible production configuration.
 TEST(Options, DefaultsValidate) {
     const Options o{};
-    const auto err = o.validate();
+    const auto    err = o.validate();
     EXPECT_FALSE(err.has_value()) << "default Options should be valid";
 }
 
 // sample_rate_ < 1 is impossible: "sample 1 in 0" makes no sense.
 // validate() must reject it with InvalidOptions.
 TEST(Options, SampleRateZeroFailsValidation) {
-    const auto o = OptionsBuilder{}.sample_rate(0).build();
+    const auto o   = OptionsBuilder{}.sample_rate(0).build();
     const auto err = o.validate();
     ASSERT_TRUE(err.has_value());
     EXPECT_EQ(err->code_, ErrorCode::InvalidOptions);
@@ -33,7 +33,7 @@ TEST(Options, SampleRateZeroFailsValidation) {
 // slot_pages_ must be a power of two for slot strides to align nicely.
 // 3 is a non-power-of-two; validate() must reject it.
 TEST(Options, SlotPagesNotPowerOfTwoFails) {
-    const auto o = OptionsBuilder{}.slot_pages(3).build();
+    const auto o   = OptionsBuilder{}.slot_pages(3).build();
     const auto err = o.validate();
     ASSERT_TRUE(err.has_value());
     EXPECT_EQ(err->code_, ErrorCode::InvalidOptions);
@@ -42,7 +42,7 @@ TEST(Options, SlotPagesNotPowerOfTwoFails) {
 // slot_pages_ has an upper bound of 64 (kSlotPagesMax in options.cpp).
 // 128 must be rejected to prevent huge accidental VM reservations.
 TEST(Options, SlotPagesAboveMaxFails) {
-    const auto o = OptionsBuilder{}.slot_pages(128).build();
+    const auto o   = OptionsBuilder{}.slot_pages(128).build();
     const auto err = o.validate();
     ASSERT_TRUE(err.has_value());
     EXPECT_EQ(err->code_, ErrorCode::InvalidOptions);
@@ -51,10 +51,7 @@ TEST(Options, SlotPagesAboveMaxFails) {
 // quarantine_capacity_ cannot exceed slot_count_ — there are not enough
 // slots to fill that many quarantine entries.
 TEST(Options, QuarantineLargerThanSlotCountFails) {
-    const auto o = OptionsBuilder{}
-                        .slot_count(8)
-                        .quarantine_capacity(32)
-                        .build();
+    const auto o   = OptionsBuilder{}.slot_count(8).quarantine_capacity(32).build();
     const auto err = o.validate();
     ASSERT_TRUE(err.has_value());
     EXPECT_EQ(err->code_, ErrorCode::InvalidOptions);
@@ -63,7 +60,7 @@ TEST(Options, QuarantineLargerThanSlotCountFails) {
 // max_alloc_size_ == 0 would route every request to "not sampled"
 // because no allocation is below 0 bytes.
 TEST(Options, MaxAllocSizeZeroFails) {
-    const auto o = OptionsBuilder{}.max_alloc_size(0).build();
+    const auto o   = OptionsBuilder{}.max_alloc_size(0).build();
     const auto err = o.validate();
     ASSERT_TRUE(err.has_value());
     EXPECT_EQ(err->code_, ErrorCode::InvalidOptions);
@@ -75,16 +72,16 @@ TEST(Options, MaxAllocSizeZeroFails) {
 // setter list.
 TEST(Options, BuilderChainingProducesExpectedValues) {
     const auto o = OptionsBuilder{}
-                        .sample_rate(500)
-                        .slot_count(128)
-                        .slot_pages(2)
-                        .max_alloc_size(std::size_t{4} << 20)
-                        .large_capacity(64)
-                        .history_capacity(512)
-                        .quarantine_capacity(32)
-                        .enable_metrics(false)
-                        .enable_logging(true)
-                        .build();
+                       .sample_rate(500)
+                       .slot_count(128)
+                       .slot_pages(2)
+                       .max_alloc_size(std::size_t{4} << 20)
+                       .large_capacity(64)
+                       .history_capacity(512)
+                       .quarantine_capacity(32)
+                       .enable_metrics(false)
+                       .enable_logging(true)
+                       .build();
     EXPECT_EQ(o.sample_rate_, 500u);
     EXPECT_EQ(o.slot_count_, 128u);
     EXPECT_EQ(o.slot_pages_, 2u);

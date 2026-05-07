@@ -151,39 +151,50 @@ public:
     // Options and returns *this so the next setter can be chained.
 
     constexpr OptionsBuilder& sample_rate(std::uint32_t v) noexcept {
-        options_.sample_rate_ = v; return *this;
+        options_.sample_rate_ = v;
+        return *this;
     }
     constexpr OptionsBuilder& slot_count(std::uint32_t v) noexcept {
-        options_.slot_count_ = v; return *this;
+        options_.slot_count_ = v;
+        return *this;
     }
     constexpr OptionsBuilder& slot_pages(std::uint32_t v) noexcept {
-        options_.slot_pages_ = v; return *this;
+        options_.slot_pages_ = v;
+        return *this;
     }
     constexpr OptionsBuilder& max_alloc_size(std::size_t v) noexcept {
-        options_.max_alloc_size_ = v; return *this;
+        options_.max_alloc_size_ = v;
+        return *this;
     }
     constexpr OptionsBuilder& large_capacity(std::uint32_t v) noexcept {
-        options_.large_capacity_ = v; return *this;
+        options_.large_capacity_ = v;
+        return *this;
     }
     constexpr OptionsBuilder& history_capacity(std::uint32_t v) noexcept {
-        options_.history_capacity_ = v; return *this;
+        options_.history_capacity_ = v;
+        return *this;
     }
     constexpr OptionsBuilder& quarantine_capacity(std::uint32_t v) noexcept {
-        options_.quarantine_capacity_ = v; return *this;
+        options_.quarantine_capacity_ = v;
+        return *this;
     }
     constexpr OptionsBuilder& enable_metrics(bool v) noexcept {
-        options_.enable_metrics_ = v; return *this;
+        options_.enable_metrics_ = v;
+        return *this;
     }
     constexpr OptionsBuilder& enable_logging(bool v) noexcept {
-        options_.enable_logging_ = v; return *this;
+        options_.enable_logging_ = v;
+        return *this;
     }
 
     /// Returns the assembled Options value. The builder itself is not
     /// modified, so it can be reused or chained further.
-    [[nodiscard]] constexpr Options build() const noexcept { return options_; }
+    [[nodiscard]] constexpr Options build() const noexcept {
+        return options_;
+    }
 
 private:
-    Options options_{};   // running configuration; modified by setters
+    Options options_{};  // running configuration; modified by setters
 };
 
 }  // namespace heisenheap

@@ -26,10 +26,10 @@
 #pragma once
 
 #if defined(HH_BUILDING_SHARED) || defined(HH_SHARED)
-    // Shared-library build path: explicitly mark this symbol as exported.
-    #define HH_API __attribute__((visibility("default")))
+// Shared-library build path: explicitly mark this symbol as exported.
+#define HH_API __attribute__((visibility("default")))
 #else
-    // Static-library build path: nothing to do, every symbol is already
-    // visible to whoever links against libheisenheap.a.
-    #define HH_API
+// Static-library build path: nothing to do, every symbol is already
+// visible to whoever links against libheisenheap.a.
+#define HH_API
 #endif

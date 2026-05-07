@@ -26,16 +26,16 @@
 
 // ---- Operating system ------------------------------------------------------
 #if defined(__APPLE__)
-    #define HH_PLATFORM_APPLE  1   // any Apple platform
-    #define HH_PLATFORM_MACOS  1   // specifically macOS (we don't target iOS)
-    #define HH_PLATFORM_POSIX  1   // POSIX APIs (sigaction, mmap, ...) are available
+#define HH_PLATFORM_APPLE 1  // any Apple platform
+#define HH_PLATFORM_MACOS 1  // specifically macOS (we don't target iOS)
+#define HH_PLATFORM_POSIX 1  // POSIX APIs (sigaction, mmap, ...) are available
 #elif defined(__linux__)
-    #define HH_PLATFORM_LINUX  1
-    #define HH_PLATFORM_POSIX  1
+#define HH_PLATFORM_LINUX 1
+#define HH_PLATFORM_POSIX 1
 #else
-    // Building on anything that isn't macOS or Linux fails here rather
-    // than producing surprises later.
-    #error "Unsupported platform: only macOS and Linux are supported."
+// Building on anything that isn't macOS or Linux fails here rather
+// than producing surprises later.
+#error "Unsupported platform: only macOS and Linux are supported."
 #endif
 
 // ---- CPU architecture ------------------------------------------------------
@@ -44,9 +44,9 @@
 // differs between AArch64 and x86_64) and for any inline assembly we
 // might need. We only bake in the two architectures we actually run on.
 #if defined(__aarch64__)
-    #define HH_ARCH_ARM64 1
+#define HH_ARCH_ARM64 1
 #elif defined(__x86_64__)
-    #define HH_ARCH_X86_64 1
+#define HH_ARCH_X86_64 1
 #else
-    #error "Unsupported architecture."
+#error "Unsupported architecture."
 #endif

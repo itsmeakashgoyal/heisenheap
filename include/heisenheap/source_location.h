@@ -74,10 +74,6 @@ struct SourceLocation {
 // rather than designated initialisers (`{.file_=a, ...}`) because designated
 // init is C++20-only. The positional form depends on field declaration
 // order in the struct above.
-#define HH_HERE                                                       \
-    ::heisenheap::SourceLocation {                                    \
-        __FILE__,                                                     \
-        static_cast<const char*>(__func__),                           \
-        static_cast<std::uint_least32_t>(__LINE__),                   \
-        0u                                                            \
-    }
+#define HH_HERE                                                                \
+    ::heisenheap::SourceLocation{__FILE__, static_cast<const char*>(__func__), \
+                                 static_cast<std::uint_least32_t>(__LINE__), 0u}

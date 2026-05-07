@@ -3,11 +3,11 @@
 // We exercise every public Span<T> entry point with simple buffers and
 // check both the runtime and constexpr surface. There is no system call
 // or threading involved — all behaviour is pure pointer arithmetic.
-#include <gtest/gtest.h>
-
 #include <array>
 #include <cstdint>
 #include <numeric>
+
+#include <gtest/gtest.h>
 
 #include "heisenheap/span.h"
 
@@ -26,7 +26,7 @@ TEST(Span, DefaultConstructedIsEmpty) {
 // Construct from an explicit (ptr, count) pair and confirm element
 // access reaches the same memory the underlying array uses.
 TEST(Span, ConstructFromPointerAndSize) {
-    int data[5] = {10, 20, 30, 40, 50};
+    int       data[5] = {10, 20, 30, 40, 50};
     Span<int> s(data, 5);
     ASSERT_EQ(s.size(), 5u);
     EXPECT_FALSE(s.empty());
@@ -50,8 +50,8 @@ TEST(Span, ConstructFromCArrayDeducesSize) {
 // "make-it-read-only" idiom. The test confirms it compiles (the static
 // type system is doing the heavy lifting) and preserves data.
 TEST(Span, ImplicitConstToConstSpanConversion) {
-    int data[3] = {1, 2, 3};
-    Span<int> mut(data);
+    int             data[3] = {1, 2, 3};
+    Span<int>       mut(data);
     Span<const int> cs = mut;  // implicit conversion
     EXPECT_EQ(cs.size(), 3u);
     EXPECT_EQ(cs[1], 2);
@@ -60,7 +60,7 @@ TEST(Span, ImplicitConstToConstSpanConversion) {
 // front()/back() return references, so writing through them mutates
 // the underlying buffer (no copy is made).
 TEST(Span, FrontAndBackReturnReferences) {
-    int data[3] = {10, 20, 30};
+    int       data[3] = {10, 20, 30};
     Span<int> s(data);
     s.front() = 100;
     s.back()  = 300;
@@ -71,10 +71,10 @@ TEST(Span, FrontAndBackReturnReferences) {
 
 // first(k) and last(k) take a sub-view from each end without copying.
 TEST(Span, FirstAndLast) {
-    int data[5] = {1, 2, 3, 4, 5};
+    int       data[5] = {1, 2, 3, 4, 5};
     Span<int> s(data);
-    auto head = s.first(2);
-    auto tail = s.last(2);
+    auto      head = s.first(2);
+    auto      tail = s.last(2);
     ASSERT_EQ(head.size(), 2u);
     ASSERT_EQ(tail.size(), 2u);
     EXPECT_EQ(head[0], 1);
@@ -86,9 +86,9 @@ TEST(Span, FirstAndLast) {
 // subspan(offset, count) gives an arbitrary middle slice, and the
 // default `count` argument means "to the end".
 TEST(Span, Subspan) {
-    int data[6] = {0, 1, 2, 3, 4, 5};
+    int       data[6] = {0, 1, 2, 3, 4, 5};
     Span<int> s(data);
-    auto mid = s.subspan(2, 3);
+    auto      mid = s.subspan(2, 3);
     ASSERT_EQ(mid.size(), 3u);
     EXPECT_EQ(mid[0], 2);
     EXPECT_EQ(mid[2], 4);
@@ -103,9 +103,9 @@ TEST(Span, Subspan) {
 // Range-based for must yield the same elements as manual indexing.
 // Confirms our begin()/end() pair is wired up correctly.
 TEST(Span, RangeForMatchesIndexing) {
-    int data[4] = {7, 8, 9, 10};
+    int       data[4] = {7, 8, 9, 10};
     Span<int> s(data);
-    int idx = 0;
+    int       idx = 0;
     for (int v : s) {
         EXPECT_EQ(v, s[static_cast<std::size_t>(idx++)]);
     }
@@ -114,7 +114,7 @@ TEST(Span, RangeForMatchesIndexing) {
 
 // size_bytes() is `size() * sizeof(T)`, useful for memcpy-style code.
 TEST(Span, SizeBytesEqualsSizeTimesSizeofT) {
-    std::int32_t arr[3]{};
+    std::int32_t       arr[3]{};
     Span<std::int32_t> s(arr);
     EXPECT_EQ(s.size_bytes(), 3u * sizeof(std::int32_t));
 }
