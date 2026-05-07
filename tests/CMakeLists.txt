@@ -11,10 +11,13 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(googletest)
 
-# hh_tests: all unit/integration tests live in one binary for now.
-# We will add more source files here later.
+# hh_tests: all unit/integration tests live in one binary.
 add_executable(hh_tests
-    placeholder.cpp
+    test_span.cpp
+    test_source_location.cpp
+    test_error.cpp
+    test_allocation.cpp
+    test_options.cpp
 )
 
 target_link_libraries(hh_tests PRIVATE

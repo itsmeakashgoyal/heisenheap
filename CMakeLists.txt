@@ -13,6 +13,8 @@ option(HH_BUILD_SHARED "Build as shared library" OFF)
 
 add_library(heisenheap STATIC
     src/allocator.cpp
+    src/error.cpp
+    src/options.cpp
 )
 
 target_include_directories(heisenheap
